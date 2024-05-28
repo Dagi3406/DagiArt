@@ -407,7 +407,241 @@ cursor: pointer;
   text-decoration: none;
   cursor: pointer;
 }
+/* General Styles */
+body {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
 
+/* Header Styles */
+.header {
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  background: #333;
+  color: #fff;
+  padding: 10px 20px;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header .logo {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.header .navbar a {
+  color: #fff;
+  text-decoration: none;
+  margin-left: 20px;
+  transition: 0.3s;
+}
+
+.header .navbar a.active, .header .navbar a:hover {
+  color: #f00;
+}
+
+.header .bx-menu {
+  display: none;
+  font-size: 30px;
+}
+
+/* For smaller screens */
+@media screen and (max-width: 768px) {
+  .header .navbar {
+    position: fixed;
+    top: 60px;
+    left: -100%;
+    background: #333;
+    width: 100%;
+    height: 100vh;
+    flex-direction: column;
+    text-align: center;
+    transition: 0.3s;
+  }
+
+  .header .navbar a {
+    display: block;
+    margin: 20px 0;
+  }
+
+  .header .bx-menu {
+    display: block;
+  }
+
+  .header .navbar.active {
+    left: 0;
+  }
+}
+
+/* Home Section */
+.home {
+  height: 100vh;
+  background: url('Images/home-bg.jpg') no-repeat center center/cover;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: #fff;
+}
+
+.home-content h1, .home-content h3, .home-content p {
+  margin: 10px 0;
+}
+
+.home-content .btn {
+  background: #f00;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.home-content .btn:hover {
+  background: #fff;
+  color: #f00;
+}
+
+/* Drawings Section */
+.Dagi {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.Dagi .heading {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.Dagi-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.Dagi-box {
+  position: relative;
+  width: 300px;
+  margin: 15px;
+}
+
+.Dagi-box img {
+  width: 100%;
+  display: block;
+}
+
+.Dagi-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  transition: 0.5s;
+}
+
+.Dagi-box:hover .Dagi-layer {
+  opacity: 1;
+}
+
+/* Contact Section */
+.Contact {
+  padding: 50px 20px;
+  text-align: center;
+}
+
+.Contact .heading {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+.Contact form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.Contact .input-box {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.Contact .input-box input, .Contact textarea {
+  width: 48%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  outline: none;
+  transition: 0.3s;
+}
+
+.Contact .input-box input:focus, .Contact textarea:focus {
+  border-color: #f00;
+}
+
+.Contact textarea {
+  width: 100%;
+  resize: none;
+}
+
+.Contact .btn {
+  background: #f00;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.Contact .btn:hover {
+  background: #fff;
+  color: #f00;
+}
+
+/* Footer */
+.footer {
+  background: #333;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+.footer .footer-text {
+  margin: 0;
+}
+
+.footer .footer-iconTop {
+  margin-top: 10px;
+}
+
+.footer .footer-iconTop a {
+  color: #fff;
+  font-size: 30px;
+  display: inline-block;
+  transition: 0.3s;
+}
+
+.footer .footer-iconTop a:hover {
+  color: #f00;
+}
+
+/* Scroll Reveal */
+.sr-top { origin: 'top' }
+.sr-bottom { origin: 'bottom' }
+.sr-left { origin: 'left' }
+.sr-right { origin: 'right' }
 /* Animations */
 @keyframes fadeIn {
   from {opacity: 0;}
