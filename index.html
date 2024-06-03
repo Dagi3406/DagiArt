@@ -7,6 +7,16 @@
     <title>Art Studio</title>
     <link rel="stylesheet" href="Style.css"/>
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script type="text/javascript"
+        src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
+</script>
+<script type="text/javascript">
+   (function(){
+      emailjs.init({
+        publicKey: "zSRVly9utVNbvuqiD",
+      });
+   })();
+</script>
   </head>
   
   <body>
@@ -158,14 +168,14 @@
       <h2 class="heading">Contact <span>Me!</span></h2>
       <form id="contact-form" action="#">
         <div class="input-box">
-          <input type="text" placeholder="Full Name">
-          <input type="email" placeholder="Email Address">
+          <input type="text" id="fullName" placeholder="Full Name">
+          <input type="email" id="email" placeholder="Email Address">
         </div>
         <div class="input-box">
-          <input type="number" placeholder="Mobile Number">
-          <input type="text" placeholder="Email Subject">
+          <input type="number" id="phoneNumber" placeholder="Mobile Number">
+          <input type="text" id="subject" placeholder="Email Subject">
         </div>
-        <textarea name="" id="" cols="30" rows="10" placeholder="Your Message"></textarea>
+        <textarea name="" id="message" cols="30" rows="10" placeholder="Your Message"></textarea>
         <input type="submit" value="Send Message" class="btn">
       </form>
     </section>
