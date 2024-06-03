@@ -56,6 +56,8 @@ window.onscroll = () => {
       loop: true
     });
 
+/*============ SendMail function =============*/
+
   function SendMail() {
       var params = {
         from_name: document.getElementById("fullName").value,
@@ -64,7 +66,7 @@ window.onscroll = () => {
         subject: document.getElementById("subject").value,
         message: document.getElementById("message").value,
       };
-      emailjs.send("service_at5g52t", "template_id", params).then(function (res) {
+      emailjs.send("service_at5g52t", "template_wtqxv5m", params).then(function (res) {
         Swal.fire({
           title: 'Success!',
           text: 'Your message has been sent successfully.',
@@ -102,14 +104,14 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmButtonText: 'OK'
       });
     } else {
-      // Swal.fire({
+      /*// Swal.fire({
       //   title: 'Success!',
       //   text: 'Your message has been sent successfully.',
       //   icon: 'success',
       //   confirmButtonText: 'OK'
       // }).then(() => {
       //   form.reset(); // Optionally, reset the form fields
-      // });
+      // });*/
        SendMail();
           form.reset(); // Optionally, reset the form fields
     }
