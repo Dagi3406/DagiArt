@@ -56,6 +56,31 @@ window.onscroll = () => {
       loop: true
     });
 
+  function SendMail() {
+      var params = {
+        from_name: document.getElementById("fullName").value,
+        email_id: document.getElementById("email").value,
+        phoneNumber: document.getElementById("phoneNumber").value,
+        subject: document.getElementById("subject").value,
+        message: document.getElementById("message").value,
+      };
+      emailjs.send("service_at5g52t", "template_id", params).then(function (res) {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Your message has been sent successfully.',
+          icon: 'success',
+          confirmButtonText: 'OK'
+        });
+      }).catch(function (err) {
+        Swal.fire({
+          title: 'Error!',
+          text: 'There was an error sending your message.',
+          icon: 'error',
+          confirmButtonText: 'OK'
+        });
+      });
+    }
+
 // Form submission alert using SweetAlert2
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('contact-form');
@@ -77,14 +102,16 @@ document.addEventListener('DOMContentLoaded', () => {
         confirmButtonText: 'OK'
       });
     } else {
-      Swal.fire({
-        title: 'Success!',
-        text: 'Your message has been sent successfully.',
-        icon: 'success',
-        confirmButtonText: 'OK'
-      }).then(() => {
-        form.reset(); // Optionally, reset the form fields
-      });
+      // Swal.fire({
+      //   title: 'Success!',
+      //   text: 'Your message has been sent successfully.',
+      //   icon: 'success',
+      //   confirmButtonText: 'OK'
+      // }).then(() => {
+      //   form.reset(); // Optionally, reset the form fields
+      // });
+       SendMail();
+          form.reset(); // Optionally, reset the form fields
     }
   });
 });
