@@ -10,6 +10,7 @@
   <script type="text/javascript"
         src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js">
 </script>
+    <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/helix.js"></script>
 <script type="text/javascript">
    (function(){
       emailjs.init({
@@ -165,6 +166,9 @@
 
     <!-- Contact section design -->
     <section class="Contact" id="Contact">
+      <!-- Spinner HTML -->
+<l-helix id="spinner" size="45" speed="2.5" color="black" style="display: none;"></l-helix>
+
       <h2 class="heading">Contact <span>Me!</span></h2>
       <form id="contact-form" action="#">
         <div class="input-box">
