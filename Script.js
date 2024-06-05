@@ -91,11 +91,11 @@ window.onscroll = () => {
 document.addEventListener('DOMContentLoaded', () => {
    const spinner = document.getElementById("spinner");
 
-  // Parse the color attribute
-  const colorAttr = spinner.getAttribute("color");
-  const [r, g, b] = colorAttr.match(/\d+/g).map(Number);
-  const color = `rgb(${r}, ${g}, ${b})`;
-  spinner.style.setProperty('--l-helix-color', color); // Set the custom property for the spinner color
+  // // Parse the color attribute
+  // const colorAttr = spinner.getAttribute("color");
+  // const [r, g, b] = colorAttr.match(/\d+/g).map(Number);
+  // const color = `rgb(${r}, ${g}, ${b})`;
+  // spinner.style.setProperty('--l-helix-color', color); // Set the custom property for the spinner color
 
   const form = document.getElementById('contact-form');
 
