@@ -59,6 +59,9 @@ window.onscroll = () => {
 /*============ SendMail function =============*/
 
   function SendMail() {
+      const spinner = document.getElementById("spinner");
+  spinner.style.display = "block"; // Show spinner
+    
       var params = {
         from_name: document.getElementById("fullName").value,
         email_id: document.getElementById("email").value,
@@ -73,6 +76,7 @@ window.onscroll = () => {
           icon: 'success',
           confirmButtonText: 'OK'
         });
+        spinner.style.display = "none"; // Hide spinner
       }).catch(function (err) {
         Swal.fire({
           title: 'Error!',
