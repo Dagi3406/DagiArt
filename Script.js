@@ -1,131 +1,206 @@
-/*============ toggle icon navbar =============*/
-let menuIcon = document.querySelector('#menu-icon');
-let navbar = document.querySelector('.navbar');
+/* ===== Gallery data: edit titles / categories here ===== */
+const drawings = [
+  { file: 'Dagi1.jpg',  title: 'Dagi',  cat: 'portrait' },
+  { file: 'Dagi2.jpg',  title: 'Leul',  cat: 'portrait' },
+  { file: 'Dagi3.jpg',  title: 'Taju',  cat: 'portrait' },
+  { file: 'Dagi4.jpg',  title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi5.jpg',  title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi6.jpg',  title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi7.jpg',  title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi8.jpg',  title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi9.jpg',  title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi10.jpg', title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi11.jpg', title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi12.jpg', title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi13.jpg', title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi14.jpg', title: 'Dagi',  cat: 'other' },
+  { file: 'Dagi15.jpg', title: 'Dagi',  cat: 'other' }
+];
 
-menuIcon.onclick = () => {
-  menuIcon.classList.toggle('bx-x');
-  navbar.classList.toggle('active');
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+
+/* ===== Theme (remembered) ===== */
+const root = document.documentElement;
+const themeBtn = $('#theme-toggle');
+function setTheme(t) {
+  root.dataset.theme = t;
+  themeBtn.innerHTML = `<i class="bx bx-${t === 'dark' ? 'sun' : 'moon'}"></i>`;
+  try { localStorage.setItem('theme', t); } catch (e) {}
 }
+let saved = null;
+try { saved = localStorage.getItem('theme'); } catch (e) {}
+setTheme(saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+themeBtn.onclick = () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
 
-/*============ scroll section ovtive link=============*/
-let section =document.querySelectorAll('section');
-let navLinks =document.querySelectorAll('header nav a');
-
-window.onscroll = () => {
-  section.forEach(sec => {
-    let top = window.scrollY;
-    let offset = sec.offsetTop - 150;
-    let height = sec.offsetHeight;
-    let id = sec.getAttribute('id');
-    
-    if(top >= offset && top < offset + height) {
-      navLinks.forEach(links => {
-        links.classList.remove('active');
-        document.querySelector('header nav a[href*=' + id +']').classList.add('active');
-      });
-    };
-  });
-  /*============ sticky navbar =============*/
-  let header = document.querySelector('header');
-  
-  header.classList.toggle('sticky', window.scrollY > 100);
-  
-  /*============ remove toggle icon and navbar when click navbar link (scroLL) =============*/
-  menuIcon.classList.remove('bx-x');
+/* ===== Mobile menu ===== */
+const menuBtn = $('#menu-icon');
+const navbar = $('#navbar');
+function closeMenu() {
   navbar.classList.remove('active');
+  menuBtn.setAttribute('aria-expanded', 'false');
+  menuBtn.innerHTML = '<i class="bx bx-menu"></i>';
+}
+menuBtn.onclick = () => {
+  const open = navbar.classList.toggle('active');
+  menuBtn.setAttribute('aria-expanded', open);
+  menuBtn.innerHTML = `<i class="bx bx-${open ? 'x' : 'menu'}"></i>`;
 };
+$$('.navbar a').forEach(a => a.addEventListener('click', closeMenu));
 
-  /*============ scroll reveal =============*/
-  ScrollReveal({
-    // reset: true,
-    distance: '80px',
-    duration: 2000,
-    delay: 200
+/* ===== Scroll: active link, sticky header, progress bar, back-to-top ===== */
+const sections = $$('section[id]');
+const navLinks = $$('.navbar a');
+const header = $('.header');
+const progress = $('#progress');
+const toTop = $('#to-top');
+addEventListener('scroll', () => {
+  const y = scrollY;
+  sections.forEach(sec => {
+    if (y >= sec.offsetTop - 150 && y < sec.offsetTop - 150 + sec.offsetHeight) {
+      navLinks.forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + sec.id));
+    }
   });
-  
-  ScrollReveal().reveal('.home-content, .heading', { orgin: 'top'});
-  ScrollReveal().reveal('.home-img, .Dagi-box, contact form', { origin:'bottom'})
-  ScrollReveal().reveal('home-content h1', { origin: 'left'});
-  ScrollReveal().reveal('.home-content p', { origin: 'right'});
-    /*============ typed js =============con*/
-    const typed = new Typed('.multiple-text', {
-      strings: ['Painter'],
-      typeSpeed: 100,
-      backSpeed: 100,
-      backDelay: 1000,
-      loop: true
-    });
+  header.classList.toggle('sticky', y > 100);
+  toTop.classList.toggle('show', y > 500);
+  const max = document.documentElement.scrollHeight - innerHeight;
+  progress.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+}, { passive: true });
 
-/*============ SendMail function =============*/
+/* ===== Build gallery ===== */
+const gallery = $('#gallery');
+gallery.innerHTML = drawings.map((d, i) => `
+  <button class="Dagi-box" data-cat="${d.cat}" data-i="${i}" aria-label="View ${d.title}, drawing ${i + 1}">
+    <img src="Images/${d.file}" alt="Drawing: ${d.title}" loading="lazy">
+    <span class="Dagi-layer"><h4>${d.title}</h4><i class="bx bx-fullscreen"></i></span>
+  </button>`).join('');
 
-  function SendMail() {
-      const spinner = document.getElementById("spinner");
-  spinner.style.display = "block"; // Show spinner
-    
-      var params = {
-        from_name: document.getElementById("fullName").value,
-        email_id: document.getElementById("email").value,
-        phoneNumber: document.getElementById("phoneNumber").value,
-        subject: document.getElementById("subject").value,
-        message: document.getElementById("message").value,
-      };
-      emailjs.send("service_at5g52t", "template_wtqxv5m", params).then(function (res) {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Your message has been sent successfully.',
-          icon: 'success',
-          confirmButtonText: 'OK'
-        });
-        spinner.style.display = "none"; // Hide spinner
-      }).catch(function (err) {
-        Swal.fire({
-          title: 'Error!',
-          text: 'There was an error sending your message.',
-          icon: 'error',
-          confirmButtonText: 'OK'
-        });
-      });
-    }
+/* ===== Filters ===== */
+$('#filters').addEventListener('click', e => {
+  const btn = e.target.closest('.filter');
+  if (!btn) return;
+  $$('.filter').forEach(b => b.classList.toggle('active', b === btn));
+  const f = btn.dataset.filter;
+  $$('.Dagi-box').forEach(b => b.classList.toggle('hide', f !== 'all' && b.dataset.cat !== f));
+});
 
-// Form submission alert using SweetAlert2
-document.addEventListener('DOMContentLoaded', () => {
-   const spinner = document.getElementById("spinner");
+/* ===== Lightbox with keyboard + swipe ===== */
+const lb = $('#lightbox'), lbImg = $('#lb-img'), lbCap = $('#lb-cap');
+let current = 0, lastFocus = null;
+const visible = () => $$('.Dagi-box:not(.hide)').map(b => +b.dataset.i);
+function show(i) {
+  current = i;
+  lbImg.src = 'Images/' + drawings[i].file;
+  lbImg.alt = 'Drawing: ' + drawings[i].title;
+  lbCap.textContent = drawings[i].title;
+}
+function openLb(i) {
+  lastFocus = document.activeElement;
+  show(i);
+  lb.hidden = false;
+  document.body.style.overflow = 'hidden';
+  $('#lb-close').focus();
+}
+function closeLb() {
+  lb.hidden = true;
+  document.body.style.overflow = '';
+  lastFocus && lastFocus.focus();
+}
+function step(dir) {
+  const list = visible();
+  const pos = list.indexOf(current);
+  show(list[(pos + dir + list.length) % list.length]);
+}
+gallery.addEventListener('click', e => {
+  const box = e.target.closest('.Dagi-box');
+  if (box) openLb(+box.dataset.i);
+});
+$('#lb-close').onclick = closeLb;
+$('#lb-prev').onclick = () => step(-1);
+$('#lb-next').onclick = () => step(1);
+lb.addEventListener('click', e => { if (e.target === lb) closeLb(); });
+addEventListener('keydown', e => {
+  if (lb.hidden) return;
+  if (e.key === 'Escape') closeLb();
+  if (e.key === 'ArrowLeft') step(-1);
+  if (e.key === 'ArrowRight') step(1);
+});
+let touchX = 0;
+lb.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+lb.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) step(dx > 0 ? -1 : 1);
+});
 
-  // // Parse the color attribute
-  // const colorAttr = spinner.getAttribute("color");
-  // const [r, g, b] = colorAttr.match(/\d+/g).map(Number);
-  // const color = `rgb(${r}, ${g}, ${b})`;
-  // spinner.style.setProperty('--l-helix-color', color); // Set the custom property for the spinner color
+/* ===== Animated stat counters ===== */
+const counters = $$('[data-count]');
+const counterObs = new IntersectionObserver((entries, obs) => {
+  entries.forEach(en => {
+    if (!en.isIntersecting) return;
+    const el = en.target, end = +el.dataset.count;
+    let n = 0;
+    const timer = setInterval(() => {
+      n += Math.max(1, Math.ceil(end / 40));
+      if (n >= end) { n = end; clearInterval(timer); }
+      el.textContent = n + '+';
+    }, 40);
+    obs.unobserve(el);
+  });
+}, { threshold: .6 });
+counters.forEach(c => counterObs.observe(c));
 
-  const form = document.getElementById('contact-form');
+/* ===== Scroll reveal & typed text ===== */
+ScrollReveal({ distance: '80px', duration: 1600, delay: 150 });
+ScrollReveal().reveal('.home-content, .heading', { origin: 'top' });
+ScrollReveal().reveal('.home-img, .about-wrap, .filters, .Contact form', { origin: 'bottom' });
+ScrollReveal().reveal('.home-content h1', { origin: 'left' });
+ScrollReveal().reveal('.home-content p', { origin: 'right' });
+new Typed('.multiple-text', {
+  strings: ['Painter', 'Portrait Artist', 'Storyteller'],
+  typeSpeed: 100, backSpeed: 60, backDelay: 1200, loop: true
+});
 
-  form.addEventListener('submit', (event) => {
-    event.preventDefault();
+/* ===== Footer year ===== */
+$('#year').textContent = new Date().getFullYear();
 
-    const name = form.querySelector('input[placeholder="Full Name"]').value;
-    const email = form.querySelector('input[placeholder="Email Address"]').value;
-    const mobile = form.querySelector('input[placeholder="Mobile Number"]').value;
-    const subject = form.querySelector('input[placeholder="Email Subject"]').value;
-    const message = form.querySelector('textarea[placeholder="Your Message"]').value;
+/* ===== Contact form ===== */
+const form = $('#contact-form');
+const spinner = $('#spinner');
+const sendBtn = $('#send-btn');
+const msg = $('#message');
+msg.addEventListener('input', () => { $('#count').textContent = msg.value.length; });
 
-    if (!name || !email || !mobile || !subject || !message) {
-      Swal.fire({
-        title: 'Error!',
-        text: 'Please fill in all fields.',
-        icon: 'error',
-        confirmButtonText: 'OK'
-      });
-    } else {
-      /*// Swal.fire({
-      //   title: 'Success!',
-      //   text: 'Your message has been sent successfully.',
-      //   icon: 'success',
-      //   confirmButtonText: 'OK'
-      // }).then(() => {
-      //   form.reset(); // Optionally, reset the form fields
-      // });*/
-       SendMail();
-          form.reset(); // Optionally, reset the form fields
-    }
+const fire = (icon, title, text) => Swal.fire({ icon, title, text, confirmButtonText: 'OK' });
+const emailOk = v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+
+form.addEventListener('submit', e => {
+  e.preventDefault();
+  const fields = ['fullName', 'email', 'phoneNumber', 'subject', 'message'].map(id => $('#' + id));
+  fields.forEach(f => f.classList.remove('invalid'));
+
+  const empty = fields.filter(f => !f.value.trim());
+  empty.forEach(f => f.classList.add('invalid'));
+  if (empty.length) return fire('error', 'Missing details', 'Fill in all fields, then send again.');
+
+  if (!emailOk($('#email').value.trim())) {
+    $('#email').classList.add('invalid');
+    return fire('error', 'Check your email', 'Enter an address like name@example.com.');
+  }
+
+  const [name, email, phone, subject, message] = fields.map(f => f.value.trim());
+  spinner.style.display = 'block';
+  sendBtn.disabled = true;
+
+  emailjs.send('service_at5g52t', 'template_wtqxv5m', {
+    from_name: name, email_id: email, phoneNumber: phone, subject, message
+  }).then(() => {
+    fire('success', 'Message sent', 'Thanks! I will reply soon.');
+    form.reset();
+    $('#count').textContent = 0;
+  }).catch(() => {
+    fire('error', 'Message not sent', 'Check your connection and try again.');
+  }).finally(() => {
+    spinner.style.display = 'none';
+    sendBtn.disabled = false;
   });
 });
