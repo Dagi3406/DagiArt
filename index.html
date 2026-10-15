@@ -1,695 +1,356 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dagi Art — Dagim Gebeyehu</title>
-<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<script>emailjs.init({ publicKey: "zSRVly9utVNbvuqiD" });</script>
-<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/helix.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dagi Art — Dagim Gebeyehu</title>
 
-<style>
-/* ============ TOKENS ============ */
-:root{
-  --bg:#0d1117; --bg2:#161b24; --bg3:#1e2530;
-  --text:#e8f0f8; --muted:#93a2b4;
-  --main:#00e5ff; --accent:#ff2e88;
-  --glass:rgba(255,255,255,.04); --border:rgba(255,255,255,.09);
-  --header-h:7.6rem;
-  --ease:cubic-bezier(.22,1,.36,1);
-  --bounce:cubic-bezier(.34,1.56,.64,1);
-}
-html[data-theme="light"]{
-  --bg:#f2f5fa; --bg2:#fff; --bg3:#e8edf5;
-  --text:#0f151f; --muted:#5b6a7d;
-  --main:#0091b3; --accent:#e0116f;
-  --glass:rgba(255,255,255,.65); --border:rgba(15,21,31,.08);
-}
-*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;text-decoration:none}
-html{font-size:62.5%;scroll-behavior:smooth;scroll-padding-top:var(--header-h)}
-body{background:var(--bg);color:var(--text);font-size:1.6rem;line-height:1.7;overflow-x:hidden;transition:background .4s var(--ease),color .4s var(--ease)}
-body.no-scroll{overflow:hidden}
-img{max-width:100%;display:block}
-button{font:inherit;color:inherit;background:none;cursor:pointer;border:none}
-section{position:relative;min-height:100vh;padding:12rem 9% 8rem;z-index:2}
-span{color:var(--main)}
-::selection{background:var(--main);color:#04121a}
+  <!-- Boxicons -->
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!-- Styles -->
+  <link rel="stylesheet" href="Style.css">
 
-/* ============ PRELOADER ============ */
-.preloader{position:fixed;inset:0;z-index:10000;display:grid;place-items:center;background:var(--bg);transition:opacity .6s var(--ease),visibility .6s var(--ease)}
-.preloader.hidden{opacity:0;visibility:hidden;pointer-events:none}
-.preloader-text{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:.35rem;text-transform:uppercase;animation:pulse 1.8s ease-in-out infinite;color:var(--text)}
-.preloader-text span{color:var(--main)}
-@keyframes pulse{0%,100%{opacity:.35}50%{opacity:1}}
-
-/* ============ SCROLL PROGRESS ============ */
-.scroll-progress{position:fixed;top:0;left:0;height:3px;width:100%;transform:scaleX(0);transform-origin:0 50%;background:linear-gradient(90deg,var(--main),var(--accent));z-index:9999;box-shadow:0 0 1.2rem var(--main);will-change:transform}
-
-/* ============ BACKGROUND BLOBS ============ */
-.bg-decor{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.blob{position:absolute;border-radius:50%;filter:blur(110px);opacity:.35;will-change:transform}
-.blob-1{width:46rem;height:46rem;top:-10rem;left:-12rem;background:var(--main);animation:floatBlob 22s ease-in-out infinite}
-.blob-2{width:38rem;height:38rem;bottom:-8rem;right:-10rem;background:var(--accent);animation:floatBlob 27s ease-in-out infinite reverse}
-.blob-3{width:30rem;height:30rem;top:45%;left:50%;background:#7c4dff;opacity:.22;animation:floatBlob 32s ease-in-out infinite}
-@keyframes floatBlob{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(6rem,-5rem) scale(1.15)}66%{transform:translate(-5rem,6rem) scale(.9)}}
-
-/* ============ HEADER ============ */
-.header{position:fixed;top:0;left:0;width:100%;padding:2.2rem 9%;display:flex;justify-content:space-between;align-items:center;gap:2rem;z-index:1000;transition:all .4s var(--ease)}
-.header.sticky{padding:1.4rem 9%;background:rgba(13,17,23,.78);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border);box-shadow:0 1rem 4rem -2rem rgba(0,0,0,.6)}
-html[data-theme="light"] .header.sticky{background:rgba(242,245,250,.85)}
-.logo{font-family:'Syne',sans-serif;font-size:2.6rem;font-weight:800;letter-spacing:-.03em;color:var(--text);transition:transform .3s var(--ease)}
-.logo:hover{transform:translateY(-2px)}
-.navbar{display:flex;align-items:center;gap:.6rem;margin-left:auto}
-.navbar a{position:relative;font-size:1.6rem;font-weight:500;color:var(--text);padding:.7rem 1.4rem;border-radius:99rem;transition:color .35s var(--ease),background .35s var(--ease)}
-.navbar a::after{content:'';position:absolute;left:50%;bottom:.2rem;width:0;height:2px;background:linear-gradient(90deg,var(--main),var(--accent));border-radius:99px;transform:translateX(-50%);transition:width .4s var(--ease)}
-.navbar a:hover,.navbar a.active{color:var(--main)}
-.navbar a:hover::after,.navbar a.active::after{width:55%}
-.header-actions{display:flex;align-items:center;gap:1.2rem}
-.theme-toggle{display:grid;place-items:center;width:4.2rem;height:4.2rem;border-radius:50%;font-size:2rem;color:var(--main);background:var(--glass);border:1px solid var(--border);transition:transform .5s var(--ease),box-shadow .35s var(--ease)}
-.theme-toggle:hover{transform:rotate(180deg) scale(1.08);box-shadow:0 0 2.5rem rgba(0,229,255,.4)}
-#menu-icon{display:none;font-size:3.2rem;color:var(--text);cursor:pointer;transition:color .3s}
-#menu-icon:hover{color:var(--main)}
-
-/* ============ HOME ============ */
-.home{display:flex;align-items:center;justify-content:center;gap:6rem;overflow:hidden}
-.home-content{flex:1 1 52rem;max-width:62rem}
-.home-content h3{font-size:3rem;font-weight:600}
-.home-content h3:nth-of-type(2){margin-bottom:1.8rem}
-.home-content h1{font-family:'Syne',sans-serif;font-size:clamp(4rem,7vw,6.4rem);font-weight:800;line-height:1.1;margin:.6rem 0 1.4rem;background:linear-gradient(120deg,var(--text) 25%,var(--main) 65%,var(--accent));background-size:220% auto;-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;animation:shine 7s linear infinite}
-@keyframes shine{to{background-position:220% center}}
-.multiple-text{position:relative;color:var(--main)}
-.home-content p{font-size:1.65rem;color:var(--muted);max-width:52rem;margin-bottom:1rem}
-.social-media{display:flex;flex-wrap:wrap;gap:1.3rem;margin:3rem 0}
-.social-media a{position:relative;display:inline-flex;align-items:center;justify-content:center;width:4.4rem;height:4.4rem;font-size:2rem;color:var(--main);border:1.5px solid rgba(0,229,255,.4);border-radius:50%;overflow:hidden;transition:color .4s var(--ease),transform .4s var(--bounce),box-shadow .4s var(--ease)}
-.social-media a::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--main),var(--accent));transform:scale(0);border-radius:50%;transition:transform .45s var(--ease);z-index:-1}
-.social-media a:hover{color:#04121a;transform:translateY(-6px);border-color:transparent;box-shadow:0 0 2.5rem rgba(0,229,255,.4)}
-.social-media a:hover::before{transform:scale(1)}
-.social-media a i{position:relative;z-index:1}
-.home-cta{display:flex;flex-wrap:wrap;gap:1.6rem}
-.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:.9rem;padding:1.3rem 3rem;font-size:1.55rem;font-weight:600;letter-spacing:.04em;color:#04121a;background:linear-gradient(120deg,var(--main),#5ee7ff);border-radius:99rem;box-shadow:0 0 2rem rgba(0,229,255,.3);overflow:hidden;isolation:isolate;cursor:pointer;transition:transform .35s var(--ease),box-shadow .35s var(--ease),color .35s var(--ease)}
-.btn::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,var(--accent),#ff7ab8);transform:translateY(101%);transition:transform .45s var(--ease)}
-.btn:hover{color:#fff;transform:translateY(-4px);box-shadow:0 1.4rem 3rem -1rem rgba(255,46,136,.65)}
-.btn:hover::before{transform:translateY(0)}
-.btn i{font-size:1.9rem;transition:transform .35s var(--ease)}
-.btn:hover i{transform:translateX(4px)}
-.btn-ghost{color:var(--text);background:transparent;border:1.5px solid var(--border);box-shadow:none}
-.btn-ghost::before{background:linear-gradient(120deg,var(--main),var(--accent))}
-.btn-ghost:hover{color:#04121a;box-shadow:0 0 2.5rem rgba(0,229,255,.4)}
-.home-img{flex:0 0 auto;position:relative;display:grid;place-items:center}
-.home-img::before{content:'';position:absolute;width:92%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,rgba(0,229,255,.35),transparent 62%),radial-gradient(circle at 70% 75%,rgba(255,46,136,.3),transparent 60%);filter:blur(28px);animation:glow 6s ease-in-out infinite}
-@keyframes glow{0%,100%{transform:scale(1);opacity:.75}50%{transform:scale(1.1);opacity:1}}
-.home-img img{position:relative;z-index:1;width:clamp(26rem,34vw,44rem);filter:drop-shadow(0 3rem 5rem rgba(0,0,0,.55));animation:floatImg 5.5s ease-in-out infinite}
-@keyframes floatImg{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-2.6rem) rotate(-1.2deg)}}
-
-/* ============ MARQUEE ============ */
-.marquee{position:relative;z-index:3;overflow:hidden;padding:2.2rem 0;background:linear-gradient(90deg,var(--main),var(--accent));transform:rotate(-1.4deg) scale(1.05);box-shadow:0 1.5rem 4rem -2rem rgba(0,229,255,.6)}
-.marquee-track{display:flex;width:max-content;animation:marquee 26s linear infinite}
-.marquee:hover .marquee-track{animation-play-state:paused}
-.marquee-group{display:flex;align-items:center;gap:3.2rem;padding-right:3.2rem}
-.marquee-group span{font-family:'Syne',sans-serif;font-size:clamp(1.8rem,3vw,2.8rem);font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:#04121a;white-space:nowrap}
-.marquee-group i{font-style:normal;font-size:1.6rem;color:rgba(4,18,26,.55)}
-@keyframes marquee{to{transform:translateX(-50%)}}
-
-/* ============ STATS ============ */
-.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;min-height:auto;padding:9rem 9%}
-.stat-card{position:relative;padding:3.2rem 2rem;text-align:center;border-radius:1.6rem;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow:hidden;transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
-.stat-card::before{content:'';position:absolute;top:-60%;left:-60%;width:220%;height:220%;background:conic-gradient(from 0deg,transparent,var(--main),transparent 40%);opacity:0;animation:spin 4s linear infinite;transition:opacity .45s var(--ease)}
-.stat-card::after{content:'';position:absolute;inset:1px;border-radius:calc(1.6rem - 1px);background:var(--bg);z-index:0}
-.stat-card:hover::before{opacity:.5}
-.stat-card:hover{transform:translateY(-8px);box-shadow:0 20px 60px -20px rgba(0,0,0,.75)}
-@keyframes spin{to{transform:rotate(360deg)}}
-.stat-card>*{position:relative;z-index:1}
-.stat-card h3{font-family:'Syne',sans-serif;font-size:clamp(3rem,5vw,4.2rem);font-weight:800;line-height:1;color:var(--main);text-shadow:0 0 2.4rem rgba(0,229,255,.5)}
-.stat-card p{margin-top:.9rem;font-size:1.35rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
-
-/* ============ HEADINGS ============ */
-.heading{font-family:'Syne',sans-serif;font-size:clamp(3.2rem,5.5vw,4.8rem);font-weight:800;line-height:1.15;letter-spacing:-.03em;text-align:center;margin-bottom:3rem}
-.heading span{background:linear-gradient(120deg,var(--main),var(--accent));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
-
-/* ============ GALLERY ============ */
-.Dagi{background:var(--bg2);border-radius:2.4rem 2.4rem 0 0}
-.Dagi h2{margin-bottom:2.4rem}
-.filter-bar{display:flex;flex-wrap:wrap;justify-content:center;gap:1rem;margin-bottom:4.5rem}
-.filter-btn{padding:.9rem 2.4rem;font-size:1.4rem;font-weight:500;letter-spacing:.06em;color:var(--muted);background:var(--glass);border:1px solid var(--border);border-radius:99rem;transition:all .35s var(--ease)}
-.filter-btn:hover{color:var(--text);border-color:var(--main);transform:translateY(-2px)}
-.filter-btn.active{color:#04121a;background:linear-gradient(120deg,var(--main),var(--accent));border-color:transparent;box-shadow:0 0 2rem rgba(0,229,255,.4)}
-.Dagi-container{display:grid;grid-template-columns:repeat(auto-fill,minmax(28rem,1fr));gap:2.4rem}
-.Dagi-box{position:relative;aspect-ratio:1/1;border-radius:1.6rem;overflow:hidden;cursor:pointer;background:var(--bg3);box-shadow:0 1.8rem 4rem -2.4rem rgba(0,0,0,.85);transition:transform .55s var(--ease),box-shadow .55s var(--ease),opacity .45s var(--ease)}
-.Dagi-box::after{content:'';position:absolute;inset:0;z-index:2;opacity:0;pointer-events:none;background:radial-gradient(22rem circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.22),transparent 62%);transition:opacity .4s var(--ease)}
-.Dagi-box:hover::after{opacity:1}
-.Dagi-box img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease),filter .6s var(--ease)}
-.Dagi-box:hover img{transform:scale(1.12) rotate(1.2deg);filter:brightness(.62) saturate(1.15)}
-.Dagi-box:hover{transform:translateY(-9px);box-shadow:0 3rem 5rem -2rem rgba(0,229,255,.35)}
-.Dagi-box.is-hidden{opacity:0;transform:scale(.82);pointer-events:none;position:absolute;visibility:hidden}
-.Dagi-layer{position:absolute;inset:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.4rem;padding:2rem;text-align:center;background:linear-gradient(to top,rgba(4,10,18,.92),rgba(0,229,255,.22));transform:translateY(100%);transition:transform .55s var(--ease)}
-.Dagi-box:hover .Dagi-layer{transform:translateY(0)}
-.layer-text h4{font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:#fff}
-.layer-text p{font-size:1.3rem;letter-spacing:.2em;text-transform:uppercase;color:var(--main);margin-top:.4rem}
-.layer-icon{display:grid;place-items:center;width:5rem;height:5rem;border-radius:50%;color:#04121a;background:linear-gradient(135deg,var(--main),var(--accent));transform:scale(.6) rotate(-25deg);opacity:0;transition:transform .5s var(--bounce) .08s,opacity .4s var(--ease) .08s}
-.Dagi-box:hover .layer-icon{transform:scale(1) rotate(0);opacity:1}
-.layer-icon i{font-size:2.3rem}
-
-/* ============ LIGHTBOX ============ */
-.lightbox{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;gap:2rem;padding:4rem 2rem;background:rgba(4,8,14,.92);backdrop-filter:blur(14px);opacity:0;visibility:hidden;transition:opacity .4s var(--ease),visibility .4s var(--ease)}
-.lightbox.open{opacity:1;visibility:visible}
-.lb-figure{position:relative;max-width:min(88vw,100rem);max-height:84vh;display:flex;flex-direction:column;align-items:center;gap:1.6rem;transform:scale(.9);transition:transform .5s var(--bounce)}
-.lightbox.open .lb-figure{transform:scale(1)}
-.lb-figure img{max-width:100%;max-height:74vh;object-fit:contain;border-radius:1.6rem;box-shadow:0 4rem 8rem -3rem rgba(0,0,0,.9);border:1px solid var(--border)}
-.lb-figure figcaption{display:flex;align-items:center;gap:1.6rem;font-size:1.45rem;color:#dbe7f2}
-.lb-title{font-weight:600}
-.lb-count{padding:.3rem 1.2rem;font-size:1.25rem;letter-spacing:.12em;border-radius:99rem;background:var(--glass);border:1px solid var(--border);color:var(--main)}
-.lb-btn{display:grid;place-items:center;width:5.2rem;height:5.2rem;flex-shrink:0;font-size:3rem;color:var(--main);border-radius:50%;background:var(--glass);border:1px solid var(--border);backdrop-filter:blur(10px);transition:all .35s var(--ease)}
-.lb-btn:hover{color:#04121a;background:linear-gradient(135deg,var(--main),var(--accent));transform:scale(1.1);box-shadow:0 0 2.5rem rgba(0,229,255,.4)}
-.lb-close{position:absolute;top:2.4rem;right:2.4rem;font-size:3.4rem}
-.lb-btn:disabled{opacity:.3;pointer-events:none}
-
-/* ============ CONTACT ============ */
-.Contact{min-height:auto;padding-bottom:12rem}
-.Contact h2{margin-bottom:4rem}
-.Contact form{max-width:72rem;margin:0 auto;text-align:center}
-.input-box{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.6rem}
-.Contact form input,.Contact form textarea{width:100%;padding:1.7rem 2rem;font-size:1.55rem;font-family:inherit;color:var(--text);background:var(--glass);border:1.5px solid var(--border);border-radius:.8rem;backdrop-filter:blur(10px);transition:all .35s var(--ease)}
-.Contact form input::placeholder,.Contact form textarea::placeholder{color:var(--muted);opacity:.75}
-.Contact form input:focus,.Contact form textarea:focus{border-color:var(--main);background:var(--bg2);box-shadow:0 0 0 4px rgba(0,229,255,.14),0 0 2.5rem rgba(0,229,255,.35);transform:translateY(-2px);outline:none}
-.input-box input{width:calc(50% - .8rem)}
-.Contact form textarea{width:100%;margin-top:1.6rem;resize:vertical;min-height:16rem;line-height:1.7}
-.Contact form .btn{margin-top:2.6rem}
-.is-invalid{border-color:#ff3b3b !important;box-shadow:0 0 0 4px rgba(255,59,59,.15) !important}
-
-/* ============ SENDING OVERLAY ============ */
-.sending{position:fixed;inset:0;z-index:6000;display:grid;place-items:center;background:rgba(4,8,14,.85);backdrop-filter:blur(8px)}
-.sending[hidden]{display:none}
-
-/* ============ FOOTER ============ */
-.footer{position:relative;z-index:3;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:2rem;padding:2.8rem 9%;background:var(--bg2);border-top:1px solid var(--border)}
-.footer-text p{font-size:1.4rem;color:var(--muted)}
-.footer-socials{display:flex;gap:1.1rem}
-.footer-socials a{display:grid;place-items:center;width:3.8rem;height:3.8rem;font-size:1.9rem;color:var(--muted);border:1px solid var(--border);border-radius:50%;transition:all .35s var(--bounce)}
-.footer-socials a:hover{color:var(--main);border-color:var(--main);transform:translateY(-4px);box-shadow:0 0 2.5rem rgba(0,229,255,.4)}
-.footer-iconTop a{display:grid;place-items:center;width:4.4rem;height:4.4rem;font-size:2.4rem;color:#04121a;border-radius:.8rem;background:linear-gradient(135deg,var(--main),var(--accent));transition:all .4s var(--bounce)}
-.footer-iconTop a:hover{transform:translateY(-5px) rotate(-8deg);box-shadow:0 0 2.5rem rgba(0,229,255,.4)}
-
-/* ============ BACK TO TOP ============ */
-.back-to-top{position:fixed;right:2.6rem;bottom:2.6rem;z-index:900;display:grid;place-items:center;width:5.2rem;height:5.2rem;border-radius:50%;background:var(--bg2);border:1px solid var(--border);color:var(--main);font-size:2.4rem;box-shadow:0 20px 60px -20px rgba(0,0,0,.75);opacity:0;visibility:hidden;transform:translateY(2rem) scale(.8);transition:all .4s var(--bounce)}
-.back-to-top.visible{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
-.back-to-top:hover{box-shadow:0 0 2.5rem rgba(0,229,255,.4);transform:translateY(-5px) scale(1.05)}
-.back-to-top svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
-.back-to-top circle{fill:none;stroke-width:2.5;stroke-linecap:round}
-.ring-bg{stroke:var(--border)}
-.ring{stroke:var(--main);stroke-dasharray:125.6;stroke-dashoffset:calc(125.6 - (125.6 * var(--progress,0)));transition:stroke-dashoffset .15s linear}
-.back-to-top i{position:relative;z-index:1}
-
-/* ============ REVEALS ============ */
-[data-reveal]{opacity:0;transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:var(--d,0s);will-change:opacity,transform}
-[data-reveal="left"]{transform:translateX(-6rem)}
-[data-reveal="right"]{transform:translateX(6rem)}
-[data-reveal="zoom"]{transform:scale(.86)}
-[data-reveal].in-view{opacity:1;transform:none}
-
-/* ============ RESPONSIVE ============ */
-@media(max-width:1200px){html{font-size:56%}.home{gap:4rem}.Dagi-container{grid-template-columns:repeat(auto-fill,minmax(24rem,1fr))}}
-@media(max-width:991px){
-  .header,.header.sticky{padding-left:4%;padding-right:4%}
-  section{padding:11rem 4% 7rem}
-  .stats{padding:8rem 4%;grid-template-columns:repeat(2,1fr)}
-  .footer{padding:2.6rem 4%}
-  .home{gap:3rem}
-  .home-img img{width:clamp(24rem,42vw,36rem)}
-}
-@media(max-width:768px){
-  #menu-icon{display:block}
-  .navbar{position:fixed;top:var(--header-h);left:0;width:100%;height:calc(100vh - var(--header-h));flex-direction:column;justify-content:flex-start;align-items:center;gap:1rem;padding:4rem 6%;background:var(--bg);border-top:1px solid var(--border);clip-path:circle(0% at 92% 4%);transition:clip-path .6s var(--ease);margin-left:0}
-  .navbar.active{clip-path:circle(150% at 92% 4%)}
-  .navbar a{width:100%;max-width:34rem;padding:1.6rem 2rem;font-size:2rem;text-align:center;border-radius:.8rem}
-  .home{flex-direction:column-reverse;text-align:center;padding-top:13rem;gap:4rem}
-  .home-content{max-width:100%}
-  .home-content p{margin-inline:auto}
-  .social-media,.home-cta{justify-content:center}
-  .home-img img{width:min(68vw,34rem)}
-  .Dagi-container{grid-template-columns:repeat(2,1fr);gap:1.8rem}
-  .lightbox{padding:7rem 1.4rem 3rem;gap:1rem}
-  .lb-btn{width:4.4rem;height:4.4rem;font-size:2.6rem}
-  .lb-close{top:1.6rem;right:1.6rem}
-  .input-box input{width:100%}
-  .footer{flex-direction:column;text-align:center}
-  .back-to-top{right:1.8rem;bottom:1.8rem}
-}
-@media(max-width:560px){
-  .stats{grid-template-columns:repeat(2,1fr);gap:1.4rem}
-  .Dagi-container{grid-template-columns:1fr}
-  .marquee{transform:rotate(-2deg) scale(1.08)}
-}
-@media(max-width:450px){html{font-size:50%}.home-cta .btn{width:100%}.stats{grid-template-columns:1fr}}
-
-@media(prefers-reduced-motion:reduce){
-  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
-  [data-reveal]{opacity:1 !important;transform:none !important}
-}
-</style>
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    emailjs.init({ publicKey: "zSRVly9utVNbvuqiD" });
+  </script>
+  <!-- LDRS spinner -->
+  <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/helix.js"></script>
 </head>
 
 <body>
 
-<!-- PRELOADER -->
-<div class="preloader" id="preloader">
-  <div class="preloader-inner">
-    <l-helix size="64" speed="1.2" color="#00e5ff"></l-helix>
-    <p class="preloader-text">Dagi<span>Art</span></p>
-  </div>
-</div>
-
-<!-- SCROLL PROGRESS -->
-<div class="scroll-progress" id="scrollProgress"></div>
-
-<!-- BACKGROUND -->
-<div class="bg-decor" aria-hidden="true">
-  <span class="blob blob-1"></span>
-  <span class="blob blob-2"></span>
-  <span class="blob blob-3"></span>
-</div>
-
-<!-- HEADER -->
-<header class="header" id="header">
-  <a href="#home" class="logo">Dagi<span>Art</span></a>
-  <nav class="navbar" id="navbar">
-    <a href="#home" class="active">Home</a>
-    <a href="#Dagi">Drawings</a>
-    <a href="#stats">About</a>
-    <a href="#Contact">Contact</a>
-  </nav>
-  <div class="header-actions">
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class='bx bx-moon'></i></button>
-    <i class='bx bx-menu' id="menu-icon"></i>
-  </div>
-</header>
-
-<!-- HOME -->
-<section class="home" id="home">
-  <div class="home-content">
-    <h3 data-reveal="left">Hello, It's Me</h3>
-    <h1 data-reveal="left" style="--d:.1s">Dagim Gebeyehu</h1>
-    <h3 data-reveal="left" style="--d:.2s">And I'm a <span class="multiple-text"></span></h3>
-    <p data-reveal="left" style="--d:.3s">A passionate painter dedicated to bringing emotions, stories, and visions to life through vibrant and evocative artwork.</p>
-
-    <div class="social-media" data-reveal="left" style="--d:.4s">
-      <a href="https://www.facebook.com/profile.php?id=61556882561871&mibextid=ZbWKwL" target="_blank" rel="noopener"><i class="bx bxl-facebook"></i></a>
-      <a href="https://x.com/Dagi3406" target="_blank" rel="noopener"><i class="bx bxl-twitter"></i></a>
-      <a href="https://t.me/Iamdagm" target="_blank" rel="noopener"><i class="bx bxl-telegram"></i></a>
-      <a href="https://www.instagram.com/iamdagm" target="_blank" rel="noopener"><i class="bx bxl-instagram-alt"></i></a>
-      <a href="https://www.linkedin.com/in/dagim-gebeyhu-3a561530b" target="_blank" rel="noopener"><i class="bx bxl-linkedin"></i></a>
-    </div>
-
-    <div class="home-cta" data-reveal="left" style="--d:.5s">
-      <a href="#Contact" class="btn magnetic"><span>Contact Info</span><i class='bx bx-right-arrow-alt'></i></a>
-      <a href="#Dagi" class="btn btn-ghost magnetic"><span>View Gallery</span><i class='bx bx-images'></i></a>
+  <!-- ============ PRELOADER ============ -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <l-helix size="64" speed="1.2" color="#00e5ff"></l-helix>
+      <p class="preloader-text">Dagi<span>Art</span></p>
     </div>
   </div>
 
-  <div class="home-img" data-reveal="right" style="--d:.2s">
-    <!-- Change src to your own Images/home.png later -->
-    <img src="https://placehold.co/600x600/161b24/00e5ff?text=Dagi+Art" alt="Artwork">
-  </div>
-</section>
+  <!-- ============ SCROLL PROGRESS ============ -->
+  <div class="scroll-progress" id="scrollProgress"></div>
 
-<!-- MARQUEE -->
-<div class="marquee" aria-hidden="true">
-  <div class="marquee-track">
-    <div class="marquee-group">
-      <span>Portrait</span><i>✦</i><span>Sketch</span><i>✦</i><span>Charcoal</span><i>✦</i><span>Concept Art</span><i>✦</i><span>Illustration</span><i>✦</i>
+  <!-- ============ CUSTOM CURSOR ============ -->
+  <div class="cursor-dot" id="cursorDot"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- ============ BACKGROUND DECOR ============ -->
+  <div class="bg-decor" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="header" id="header">
+    <a href="#home" class="logo">Dagi<span>Art</span></a>
+
+    <nav class="navbar" id="navbar">
+      <a href="#home" class="active">Home</a>
+      <a href="#Dagi">Drawings</a>
+      <a href="#stats">About</a>
+      <a href="#Contact">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <i class='bx bx-moon'></i>
+      </button>
+      <i class='bx bx-menu' id="menu-icon"></i>
     </div>
-    <div class="marquee-group">
-      <span>Portrait</span><i>✦</i><span>Sketch</span><i>✦</i><span>Charcoal</span><i>✦</i><span>Concept Art</span><i>✦</i><span>Illustration</span><i>✦</i>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <section class="home" id="home">
+    <div class="home-content">
+      <h3 data-reveal="left">Hello, It's Me</h3>
+      <h1 data-reveal="left" style="--d:.1s">Dagim Gebeyehu</h1>
+      <h3 data-reveal="left" style="--d:.2s">And I'm a <span class="multiple-text"></span></h3>
+      <p data-reveal="left" style="--d:.3s">
+        A passionate painter dedicated to bringing emotions, stories, and visions
+        to life through vibrant and evocative artwork.
+      </p>
+
+      <div class="social-media" data-reveal="left" style="--d:.4s">
+        <a href="https://www.facebook.com/profile.php?id=61556882561871&mibextid=ZbWKwL" target="_blank" rel="noopener" aria-label="Facebook"><i class="bx bxl-facebook"></i></a>
+        <a href="https://x.com/Dagi3406" target="_blank" rel="noopener" aria-label="Twitter"><i class="bx bxl-twitter"></i></a>
+        <a href="https://t.me/Iamdagm" target="_blank" rel="noopener" aria-label="Telegram"><i class="bx bxl-telegram"></i></a>
+        <a href="https://www.instagram.com/iamdagm" target="_blank" rel="noopener" aria-label="Instagram"><i class="bx bxl-instagram-alt"></i></a>
+        <a href="https://www.linkedin.com/in/dagim-gebeyhu-3a561530b" target="_blank" rel="noopener" aria-label="LinkedIn"><i class="bx bxl-linkedin"></i></a>
+      </div>
+
+      <div class="home-cta" data-reveal="left" style="--d:.5s">
+        <a href="#Contact" class="btn magnetic">
+          <span>Contact Info</span>
+          <i class='bx bx-right-arrow-alt'></i>
+        </a>
+        <a href="#Dagi" class="btn btn-ghost magnetic">
+          <span>View Gallery</span>
+          <i class='bx bx-images'></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="home-img" data-reveal="right" style="--d:.2s">
+      <!-- This path is correct assuming index.html is in the root folder -->
+      <img src="Images/home.png" alt="Artwork by Dagim Gebeyehu">
+    </div>
+
+    <a href="#Dagi" class="scroll-down" aria-label="Scroll down">
+      <span class="mouse"><span class="wheel"></span></span>
+      <em>Scroll</em>
+    </a>
+  </section>
+
+  <!-- ============ MARQUEE ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee-track">
+      <div class="marquee-group">
+        <span>Portrait</span><i>✦</i>
+        <span>Sketch</span><i>✦</i>
+        <span>Charcoal</span><i>✦</i>
+        <span>Concept Art</span><i>✦</i>
+        <span>Illustration</span><i>✦</i>
+      </div>
+      <div class="marquee-group">
+        <span>Portrait</span><i>✦</i>
+        <span>Sketch</span><i>✦</i>
+        <span>Charcoal</span><i>✦</i>
+        <span>Concept Art</span><i>✦</i>
+        <span>Illustration</span><i>✦</i>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- STATS -->
-<section class="stats" id="stats">
-  <div class="stat-card" data-reveal="zoom"><h3><span class="stat-num" data-target="15" data-suffix="+">0</span></h3><p>Artworks</p></div>
-  <div class="stat-card" data-reveal="zoom" style="--d:.1s"><h3><span class="stat-num" data-target="5" data-suffix="+">0</span></h3><p>Years Drawing</p></div>
-  <div class="stat-card" data-reveal="zoom" style="--d:.2s"><h3><span class="stat-num" data-target="30" data-suffix="+">0</span></h3><p>Happy Clients</p></div>
-  <div class="stat-card" data-reveal="zoom" style="--d:.3s"><h3><span class="stat-num" data-target="100" data-suffix="%">0</span></h3><p>Passion</p></div>
-</section>
-
-<!-- GALLERY -->
-<section class="Dagi" id="Dagi">
-  <h2 class="heading" data-reveal>Latest <span>Drawings</span></h2>
-
-  <div class="filter-bar" data-reveal style="--d:.1s">
-    <button class="filter-btn active" data-filter="all">All</button>
-    <button class="filter-btn" data-filter="portrait">Portrait</button>
-    <button class="filter-btn" data-filter="sketch">Sketch</button>
-    <button class="filter-btn" data-filter="concept">Concept</button>
-  </div>
-
-  <div class="Dagi-container" id="gallery">
-    <!-- Swap src with Images/Dagi1.jpg etc. when you have them -->
-    <article class="Dagi-box" data-category="portrait" data-title="Dagi — Portrait Study" data-reveal="zoom">
-      <img src="https://placehold.co/500x500/161b24/00e5ff?text=Art+01" alt="Portrait" loading="lazy">
-      <div class="Dagi-layer"><div class="layer-text"><h4>Dagi</h4><p>Portrait</p></div><span class="layer-icon"><i class='bx bx-expand-alt'></i></span></div>
-    </article>
-    <article class="Dagi-box" data-category="sketch" data-title="Leul — Pencil Sketch" data-reveal="zoom">
-      <img src="https://placehold.co/500x500/161b24/ff2e88?text=Art+02" alt="Sketch" loading="lazy">
-      <div class="Dagi-layer"><div class="layer-text"><h4>Leul</h4><p>Sketch</p></div><span class="layer-icon"><i class='bx bx-expand-alt'></i></span></div>
-    </article>
-    <article class="Dagi-box" data-category="concept" data-title="Taju — Concept Piece" data-reveal="zoom">
-      <img src="https://placehold.co/500x500/161b24/7c4dff?text=Art+03" alt="Concept" loading="lazy">
-      <div class="Dagi-layer"><div class="layer-text"><h4>Taju</h4><p>Concept</p></div><span class="layer-icon"><i class='bx bx-expand-alt'></i></span></div>
-    </article>
-    <article class="Dagi-box" data-category="portrait" data-title="Dagi — Portrait 04" data-reveal="zoom">
-      <img src="https://placehold.co/500x500/1e2530/00e5ff?text=Art+04" alt="Portrait" loading="lazy">
-      <div class="Dagi-layer"><div class="layer-text"><h4>Dagi</h4><p>Portrait</p></div><span class="layer-icon"><i class='bx bx-expand-alt'></i></span></div>
-    </article>
-    <article class="Dagi-box" data-category="sketch" data-title="Dagi — Sketch 05" data-reveal="zoom">
-      <img src="https://placehold.co/500x500/1e2530/ff2e88?text=Art+05" alt="Sketch" loading="lazy">
-      <div class="Dagi-layer"><div class="layer-text"><h4>Dagi</h4><p>Sketch</p></div><span class="layer-icon"><i class='bx bx-expand-alt'></i></span></div>
-    </article>
-    <article class="Dagi-box" data-category="concept" data-title="Dagi — Concept 06" data-reveal="zoom">
-      <img src="https://placehold.co/500x500/1e2530/7c4dff?text=Art+06" alt="Concept" loading="lazy">
-      <div class="Dagi-layer"><div class="layer-text"><h4>Dagi</h4><p>Concept</p></div><span class="layer-icon"><i class='bx bx-expand-alt'></i></span></div>
-    </article>
-  </div>
-</section>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox" role="dialog" aria-hidden="true">
-  <button class="lb-btn lb-close" id="lbClose" aria-label="Close"><i class='bx bx-x'></i></button>
-  <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous"><i class='bx bx-chevron-left'></i></button>
-  <figure class="lb-figure">
-    <img src="" alt="" id="lbImage">
-    <figcaption><span class="lb-title" id="lbTitle"></span><span class="lb-count" id="lbCount"></span></figcaption>
-  </figure>
-  <button class="lb-btn lb-next" id="lbNext" aria-label="Next"><i class='bx bx-chevron-right'></i></button>
-</div>
-
-<!-- CONTACT -->
-<section class="Contact" id="Contact">
-  <h2 class="heading" data-reveal>Contact <span>Me!</span></h2>
-  <form id="contact-form" novalidate data-reveal style="--d:.1s">
-    <div class="input-box">
-      <input type="text" id="fullName" placeholder="Full Name" autocomplete="name" required>
-      <input type="email" id="email" placeholder="Email Address" autocomplete="email" required>
+  <!-- ============ STATS ============ -->
+  <section class="stats" id="stats">
+    <div class="stat-card" data-reveal="zoom">
+      <h3><span class="stat-num" data-target="15" data-suffix="+">0</span></h3>
+      <p>Artworks</p>
     </div>
-    <div class="input-box">
-      <input type="tel" id="phoneNumber" placeholder="Mobile Number" autocomplete="tel">
-      <input type="text" id="subject" placeholder="Email Subject">
+    <div class="stat-card" data-reveal="zoom" style="--d:.1s">
+      <h3><span class="stat-num" data-target="5" data-suffix="+">0</span></h3>
+      <p>Years Drawing</p>
     </div>
-    <textarea id="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
-    <button type="submit" class="btn magnetic" id="sendBtn"><span>Send Message</span><i class='bx bx-send'></i></button>
-  </form>
-</section>
+    <div class="stat-card" data-reveal="zoom" style="--d:.2s">
+      <h3><span class="stat-num" data-target="30" data-suffix="+">0</span></h3>
+      <p>Happy Clients</p>
+    </div>
+    <div class="stat-card" data-reveal="zoom" style="--d:.3s">
+      <h3><span class="stat-num" data-target="100" data-suffix="%">0</span></h3>
+      <p>Passion</p>
+    </div>
+  </section>
 
-<!-- SENDING OVERLAY -->
-<div class="sending" id="sending" hidden>
-  <l-helix size="80" speed="0.9" color="#00e5ff"></l-helix>
-</div>
+  <!-- ============ GALLERY ============ -->
+  <section class="Dagi" id="Dagi">
+    <h2 class="heading" data-reveal>Latest <span>Drawings</span></h2>
 
-<!-- FOOTER -->
-<footer class="footer">
-  <div class="footer-text"><p>Copyright &copy; 2024 by Dagim Gebeyehu | All Rights Reserved.</p></div>
-  <div class="footer-socials">
-    <a href="https://www.instagram.com/iamdagm" target="_blank" rel="noopener"><i class="bx bxl-instagram-alt"></i></a>
-    <a href="https://t.me/Iamdagm" target="_blank" rel="noopener"><i class="bx bxl-telegram"></i></a>
-    <a href="https://x.com/Dagi3406" target="_blank" rel="noopener"><i class="bx bxl-twitter"></i></a>
+    <div class="filter-bar" data-reveal style="--d:.1s">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="portrait">Portrait</button>
+      <button class="filter-btn" data-filter="sketch">Sketch</button>
+      <button class="filter-btn" data-filter="concept">Concept</button>
+    </div>
+
+    <div class="Dagi-container" id="gallery">
+      <!-- All image paths below are correct assuming index.html is in the root folder -->
+      <article class="Dagi-box" data-category="portrait" data-title="Dagi — Portrait Study" data-reveal="zoom">
+        <img src="Images/Dagi1.jpg" alt="Portrait drawing" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Portrait</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="sketch" data-title="Leul — Pencil Sketch" data-reveal="zoom">
+        <img src="Images/Dagi2.jpg" alt="Pencil sketch" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Leul</h4><p>Sketch</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="concept" data-title="Taju — Concept Piece" data-reveal="zoom">
+        <img src="Images/Dagi3.jpg" alt="Concept artwork" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Taju</h4><p>Concept</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="portrait" data-title="Dagi — Portrait 04" data-reveal="zoom">
+        <img src="Images/Dagi4.jpg" alt="Portrait drawing" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Portrait</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="sketch" data-title="Dagi — Sketch 05" data-reveal="zoom">
+        <img src="Images/Dagi5.jpg" alt="Sketch drawing" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Sketch</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="concept" data-title="Dagi — Concept 06" data-reveal="zoom">
+        <img src="Images/Dagi6.jpg" alt="Concept artwork" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Concept</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="portrait" data-title="Dagi — Portrait 07" data-reveal="zoom">
+        <img src="Images/Dagi7.jpg" alt="Portrait drawing" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Portrait</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="sketch" data-title="Dagi — Sketch 08" data-reveal="zoom">
+        <img src="Images/Dagi8.jpg" alt="Sketch drawing" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Sketch</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="concept" data-title="Dagi — Concept 09" data-reveal="zoom">
+        <img src="Images/Dagi9.jpg" alt="Concept artwork" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Concept</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="portrait" data-title="Dagi — Portrait 10" data-reveal="zoom">
+        <img src="Images/Dagi10.jpg" alt="Portrait drawing" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Portrait</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="sketch" data-title="Dagi — Sketch 11" data-reveal="zoom">
+        <img src="Images/Dagi11.jpg" alt="Sketch drawing" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Sketch</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="concept" data-title="Dagi — Concept 12" data-reveal="zoom">
+        <img src="Images/Dagi12.jpg" alt="Concept artwork" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Concept</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="portrait" data-title="Dagi — Portrait 13" data-reveal="zoom">
+        <img src="Images/Dagi13.jpg" alt="Portrait drawing" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Portrait</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="sketch" data-title="Dagi — Sketch 14" data-reveal="zoom">
+        <img src="Images/Dagi14.jpg" alt="Sketch drawing" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Sketch</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+
+      <article class="Dagi-box" data-category="concept" data-title="Dagi — Concept 15" data-reveal="zoom">
+        <img src="Images/Dagi15.jpg" alt="Concept artwork" loading="lazy">
+        <div class="Dagi-layer">
+          <div class="layer-text"><h4>Dagi</h4><p>Concept</p></div>
+          <span class="layer-icon"><i class='bx bx-expand-alt'></i></span>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ LIGHTBOX ============ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
+    <button class="lb-btn lb-close" id="lbClose" aria-label="Close"><i class='bx bx-x'></i></button>
+    <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous"><i class='bx bx-chevron-left'></i></button>
+
+    <figure class="lb-figure">
+      <img src="" alt="" id="lbImage">
+      <figcaption>
+        <span class="lb-title" id="lbTitle"></span>
+        <span class="lb-count" id="lbCount"></span>
+      </figcaption>
+    </figure>
+
+    <button class="lb-btn lb-next" id="lbNext" aria-label="Next"><i class='bx bx-chevron-right'></i></button>
   </div>
-  <div class="footer-iconTop"><a href="#home"><i class="bx bx-up-arrow-alt"></i></a></div>
-</footer>
 
-<!-- BACK TO TOP -->
-<button class="back-to-top" id="backToTop" aria-label="Back to top">
-  <svg viewBox="0 0 44 44"><circle class="ring-bg" cx="22" cy="22" r="20"></circle><circle class="ring" cx="22" cy="22" r="20"></circle></svg>
-  <i class='bx bx-up-arrow-alt'></i>
-</button>
+  <!-- ============ CONTACT ============ -->
+  <section class="Contact" id="Contact">
+    <h2 class="heading" data-reveal>Contact <span>Me!</span></h2>
 
-<script>
-'use strict';
-const $  = (s,c=document)=>c.querySelector(s);
-const $$ = (s,c=document)=>[...c.querySelectorAll(s)];
-const prefersReducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;
+    <form id="contact-form" novalidate data-reveal style="--d:.1s">
+      <div class="input-box">
+        <input type="text"  id="fullName"    placeholder="Full Name"     autocomplete="name"  required>
+        <input type="email" id="email"       placeholder="Email Address" autocomplete="email" required>
+      </div>
+      <div class="input-box">
+        <input type="tel"   id="phoneNumber" placeholder="Mobile Number" autocomplete="tel">
+        <input type="text"  id="subject"     placeholder="Email Subject">
+      </div>
+      <textarea id="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
 
-/* ---------- PRELOADER ---------- */
-(function(){
-  const p = $('#preloader'); if(!p) return;
-  document.body.classList.add('no-scroll');
-  const hide = () => {
-    p.classList.add('hidden');
-    document.body.classList.remove('no-scroll');
-    setTimeout(()=>$$('.home [data-reveal]').forEach(el=>el.classList.add('in-view')),150);
-  };
-  if(document.readyState === 'complete') setTimeout(hide,400);
-  else { window.addEventListener('load',()=>setTimeout(hide,500)); setTimeout(hide,3000); }
-})();
+      <button type="submit" class="btn magnetic" id="sendBtn">
+        <span>Send Message</span>
+        <i class='bx bx-send'></i>
+      </button>
+    </form>
+  </section>
 
-/* ---------- THEME ---------- */
-(function(){
-  const root=document.documentElement, t=$('#themeToggle'); if(!t) return;
-  const icon=$('i',t);
-  const apply = th => { root.setAttribute('data-theme',th); icon.className = th==='light'?'bx bx-sun':'bx bx-moon'; };
-  apply(localStorage.getItem('dagi-theme')||'dark');
-  t.addEventListener('click',()=>{
-    const next = root.getAttribute('data-theme')==='light'?'dark':'light';
-    apply(next); localStorage.setItem('dagi-theme',next);
-  });
-})();
+  <!-- Sending overlay -->
+  <div class="sending" id="sending" hidden>
+    <l-helix size="80" speed="0.9" color="#00e5ff"></l-helix>
+  </div>
 
-/* ---------- SCROLL PROGRESS ---------- */
-(function(){
-  const bar=$('#scrollProgress'); if(!bar) return;
-  let ticking=false;
-  const upd=()=>{ const st=scrollY, dh=document.documentElement.scrollHeight-innerHeight;
-    bar.style.transform=`scaleX(${dh>0?st/dh:0})`; ticking=false; };
-  addEventListener('scroll',()=>{ if(!ticking){ requestAnimationFrame(upd); ticking=true; } },{passive:true});
-  upd();
-})();
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-text">
+      <p>Copyright &copy; 2024 by Dagim Gebeyehu | All Rights Reserved.</p>
+    </div>
+    <div class="footer-socials">
+      <a href="https://www.instagram.com/iamdagm" target="_blank" rel="noopener" aria-label="Instagram"><i class="bx bxl-instagram-alt"></i></a>
+      <a href="https://t.me/Iamdagm" target="_blank" rel="noopener" aria-label="Telegram"><i class="bx bxl-telegram"></i></a>
+      <a href="https://x.com/Dagi3406" target="_blank" rel="noopener" aria-label="Twitter"><i class="bx bxl-twitter"></i></a>
+    </div>
+    <div class="footer-iconTop">
+      <a href="#home" aria-label="Back to top"><i class="bx bx-up-arrow-alt"></i></a>
+    </div>
+  </footer>
 
-/* ---------- MOBILE MENU ---------- */
-(function(){
-  const mi=$('#menu-icon'), nb=$('#navbar'); if(!mi||!nb) return;
-  mi.addEventListener('click',()=>{
-    mi.classList.toggle('bx-x'); nb.classList.toggle('active');
-    document.body.classList.toggle('no-scroll', nb.classList.contains('active'));
-  });
-  $$('a',nb).forEach(a=>a.addEventListener('click',()=>{
-    mi.classList.remove('bx-x'); nb.classList.remove('active');
-    document.body.classList.remove('no-scroll');
-  }));
-})();
+  <!-- ============ BACK TO TOP (with progress ring) ============ -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <svg viewBox="0 0 44 44">
+      <circle class="ring-bg" cx="22" cy="22" r="20"></circle>
+      <circle class="ring"    cx="22" cy="22" r="20"></circle>
+    </svg>
+    <i class='bx bx-up-arrow-alt'></i>
+  </button>
 
-/* ---------- STICKY + SCROLLSPY ---------- */
-(function(){
-  const header=$('#header'), secs=$$('section[id]'), links=$$('#navbar a');
-  let ticking=false;
-  const upd=()=>{
-    const y=scrollY;
-    if(header) header.classList.toggle('sticky', y>60);
-    secs.forEach(s=>{
-      const t=s.offsetTop-200, b=t+s.offsetHeight, id=s.id;
-      if(y>=t && y<b){
-        links.forEach(l=>l.classList.remove('active'));
-        const a=$(`#navbar a[href="#${id}"]`); if(a) a.classList.add('active');
-      }
-    });
-    ticking=false;
-  };
-  addEventListener('scroll',()=>{ if(!ticking){ requestAnimationFrame(upd); ticking=true; } },{passive:true});
-  upd();
-})();
-
-/* ---------- REVEALS ---------- */
-(function(){
-  const items=$$('[data-reveal]'); if(!items.length) return;
-  if(prefersReducedMotion || !('IntersectionObserver' in window)){
-    items.forEach(el=>el.classList.add('in-view')); return;
-  }
-  const ob=new IntersectionObserver((es,o)=>es.forEach(e=>{
-    if(e.isIntersecting){ e.target.classList.add('in-view'); o.unobserve(e.target); }
-  }),{threshold:.15, rootMargin:'0px 0px -60px 0px'});
-  items.forEach(el=>ob.observe(el));
-})();
-
-/* ---------- TYPED ---------- */
-(function(){
-  if(typeof Typed==='undefined') return;
-  if(!$('.multiple-text')) return;
-  new Typed('.multiple-text',{strings:['Painter','Illustrator','Sketch Artist','Storyteller'],typeSpeed:70,backSpeed:45,backDelay:1400,startDelay:400,smartBackspace:true,loop:true});
-})();
-
-/* ---------- COUNTERS ---------- */
-(function(){
-  const nums=$$('.stat-num'); if(!nums.length) return;
-  const run = el => {
-    const target=parseFloat(el.dataset.target||'0'), suffix=el.dataset.suffix||'';
-    const dur=1800, start=performance.now();
-    const tick = now => {
-      const t=Math.min((now-start)/dur,1);
-      const eased = t===1?1:1-Math.pow(2,-10*t);
-      el.textContent=Math.round(eased*target)+suffix;
-      if(t<1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  };
-  if(prefersReducedMotion || !('IntersectionObserver' in window)){
-    nums.forEach(el=>el.textContent=el.dataset.target+(el.dataset.suffix||'')); return;
-  }
-  const ob=new IntersectionObserver((es,o)=>es.forEach(e=>{
-    if(e.isIntersecting){ run(e.target); o.unobserve(e.target); }
-  }),{threshold:.5});
-  nums.forEach(el=>ob.observe(el));
-})();
-
-/* ---------- GALLERY FILTER + SPOTLIGHT ---------- */
-(function(){
-  const gal=$('#gallery'); if(!gal) return;
-  const boxes=$$('.Dagi-box',gal), btns=$$('.filter-btn');
-  btns.forEach(b=>b.addEventListener('click',()=>{
-    btns.forEach(x=>x.classList.remove('active')); b.classList.add('active');
-    const f=b.dataset.filter;
-    boxes.forEach(box=>{
-      const match = f==='all' || box.dataset.category===f;
-      box.classList.toggle('is-hidden', !match);
-    });
-  }));
-  if(!isTouch && !prefersReducedMotion){
-    boxes.forEach(box=>box.addEventListener('mousemove',e=>{
-      const r=box.getBoundingClientRect();
-      box.style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
-      box.style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
-    }));
-  }
-})();
-
-/* ---------- LIGHTBOX ---------- */
-(function(){
-  const lb=$('#lightbox'), im=$('#lbImage'), ti=$('#lbTitle'), co=$('#lbCount');
-  const cl=$('#lbClose'), pv=$('#lbPrev'), nx=$('#lbNext');
-  const boxes=$$('.Dagi-box'); if(!lb||!boxes.length) return;
-  let idx=0, last=null;
-  const visible = () => boxes.filter(b=>!b.classList.contains('is-hidden'));
-  const show = i => {
-    const v=visible(); if(!v.length) return;
-    idx=(i+v.length)%v.length;
-    const box=v[idx], img=$('img',box);
-    im.src=img.src; im.alt=img.alt||'';
-    ti.textContent=box.dataset.title||'';
-    co.textContent=`${idx+1} / ${v.length}`;
-    const multi=v.length>1;
-    pv.disabled=!multi; nx.disabled=!multi;
-  };
-  const open = box => {
-    last=document.activeElement;
-    show(visible().indexOf(box));
-    lb.classList.add('open'); lb.setAttribute('aria-hidden','false');
-    document.body.classList.add('no-scroll'); cl.focus();
-  };
-  const close = () => {
-    lb.classList.remove('open'); lb.setAttribute('aria-hidden','true');
-    document.body.classList.remove('no-scroll');
-    if(last) last.focus();
-  };
-  boxes.forEach(b=>b.addEventListener('click',()=>open(b)));
-  cl.addEventListener('click',close);
-  pv.addEventListener('click',()=>show(idx-1));
-  nx.addEventListener('click',()=>show(idx+1));
-  lb.addEventListener('click',e=>{ if(e.target===lb) close(); });
-  document.addEventListener('keydown',e=>{
-    if(!lb.classList.contains('open')) return;
-    if(e.key==='Escape') close();
-    if(e.key==='ArrowLeft') show(idx-1);
-    if(e.key==='ArrowRight') show(idx+1);
-  });
-  let tx=0;
-  lb.addEventListener('touchstart',e=>tx=e.changedTouches[0].screenX,{passive:true});
-  lb.addEventListener('touchend',e=>{
-    const dx=e.changedTouches[0].screenX-tx;
-    if(Math.abs(dx)<55) return;
-    show(dx>0?idx-1:idx+1);
-  },{passive:true});
-})();
-
-/* ---------- MAGNETIC BUTTONS ---------- */
-(function(){
-  if(isTouch || prefersReducedMotion) return;
-  const strength=.28;
-  $$('.magnetic').forEach(btn=>{
-    btn.addEventListener('mousemove',e=>{
-      const r=btn.getBoundingClientRect();
-      btn.style.transform=`translate(${(e.clientX-r.left-r.width/2)*strength}px, ${(e.clientY-r.top-r.height/2)*strength}px)`;
-    });
-    btn.addEventListener('mouseleave',()=>btn.style.transform='');
-  });
-})();
-
-/* ---------- BACK TO TOP ---------- */
-(function(){
-  const btn=$('#backToTop'); if(!btn) return;
-  let ticking=false;
-  const upd=()=>{
-    const st=scrollY, dh=document.documentElement.scrollHeight-innerHeight;
-    btn.style.setProperty('--progress', (dh>0?Math.min(st/dh,1):0).toFixed(4));
-    btn.classList.toggle('visible', st>400);
-    ticking=false;
-  };
-  addEventListener('scroll',()=>{ if(!ticking){ requestAnimationFrame(upd); ticking=true; } },{passive:true});
-  btn.addEventListener('click',()=>scrollTo({top:0,behavior:prefersReducedMotion?'auto':'smooth'}));
-  upd();
-})();
-
-/* ---------- SMOOTH ANCHORS ---------- */
-(function(){
-  $$('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
-    const id=a.getAttribute('href');
-    if(id==='#'||id.length<2) return;
-    const t=document.querySelector(id); if(!t) return;
-    e.preventDefault();
-    const h=parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h'))||76;
-    scrollTo({top:t.getBoundingClientRect().top+scrollY-h+1,behavior:prefersReducedMotion?'auto':'smooth'});
-  }));
-})();
-
-/* ---------- EMAILJS ---------- */
-function SendMail(){
-  const sending=$('#sending'), btn=$('#sendBtn');
-  const params={
-    from_name:$('#fullName').value.trim(),
-    email_id:$('#email').value.trim(),
-    phoneNumber:$('#phoneNumber').value.trim(),
-    subject:$('#subject').value.trim(),
-    message:$('#message').value.trim(),
-  };
-  if(sending) sending.hidden=false;
-  if(btn) btn.disabled=true;
-  emailjs.send('service_at5g52t','template_wtqxv5m',params)
-    .then(()=>{
-      if(sending) sending.hidden=true; if(btn) btn.disabled=false;
-      Swal.fire({title:'Success!',text:'Your message has been sent successfully.',icon:'success',confirmButtonText:'OK',confirmButtonColor:'#00e5ff'});
-    })
-    .catch(err=>{
-      console.error(err);
-      if(sending) sending.hidden=true; if(btn) btn.disabled=false;
-      Swal.fire({title:'Error!',text:'There was an error sending your message.',icon:'error',confirmButtonText:'OK',confirmButtonColor:'#00e5ff'});
-    });
-}
-
-/* ---------- FORM ---------- */
-document.addEventListener('DOMContentLoaded',()=>{
-  const form=$('#contact-form'); if(!form) return;
-  const f={name:$('#fullName'),email:$('#email'),mobile:$('#phoneNumber'),subject:$('#subject'),message:$('#message')};
-  Object.values(f).forEach(el=>el.addEventListener('input',()=>el.classList.remove('is-invalid')));
-  const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  form.addEventListener('submit',e=>{
-    e.preventDefault();
-    const v={name:f.name.value.trim(),email:f.email.value.trim(),mobile:f.mobile.value.trim(),subject:f.subject.value.trim(),message:f.message.value.trim()};
-    const miss=Object.entries(v).find(([,x])=>!x);
-    if(miss){ Swal.fire({title:'Wait!',text:`Please fill in the ${miss[0]} field.`,icon:'warning',confirmButtonColor:'#00e5ff'}); f[miss[0]].classList.add('is-invalid'); f[miss[0]].focus(); return; }
-    if(!re.test(v.email)){ Swal.fire({title:'Invalid Email',text:'Please enter a valid email address.',icon:'warning',confirmButtonColor:'#00e5ff'}); f.email.classList.add('is-invalid'); f.email.focus(); return; }
-    SendMail(); form.reset();
-  });
-});
-</script>
+  <!-- ============ SCRIPTS ============ -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+  <script src="Script.js"></script>
 </body>
 </html>
