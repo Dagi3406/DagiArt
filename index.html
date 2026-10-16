@@ -1,18 +1,49 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" data-accent="cyan">
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dagi Art — Dagim Gebeyehu</title>
+  <meta name="description" content="Portfolio of Dagim Gebeyehu — painter, illustrator and sketch artist. Browse portraits, sketches and concept art, and get in touch for commissions.">
+  <meta name="theme-color" content="#0d1117">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Dagi Art — Dagim Gebeyehu">
+  <meta property="og:description" content="Portraits, sketches and concept art by Dagim Gebeyehu.">
+  <meta property="og:image" content="Images/home.png">
 
-  <!-- Boxicons (UI icons: menu, arrows, lightbox, etc.) -->
-  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <!-- Favicon (inline, no extra file needed) -->
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230d1117'/%3E%3Ctext x='32' y='45' font-size='36' font-family='Arial' font-weight='800' text-anchor='middle' fill='%2300e5ff'%3ED%3C/text%3E%3C/svg%3E">
 
-  <!-- Font Awesome (brand/social icons only) -->
+  <!-- Restore saved theme/accent before first paint (no flash) -->
+  <script>
+    (function () {
+      var r = document.documentElement;
+      r.classList.add('js');
+      try {
+        var t = localStorage.getItem('dagi-theme');
+        var a = localStorage.getItem('dagi-accent');
+        if (t) r.setAttribute('data-theme', t);
+        if (a) r.setAttribute('data-accent', a);
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- Boxicons (UI icons). If the first CDN is blocked, the onerror swaps to a backup. -->
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
+        onerror="this.onerror=null;this.href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'">
+
+  <!-- Font Awesome (brand/social icons). Same backup idea. -->
   <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-        referrerpolicy="no-referrer">
+        referrerpolicy="no-referrer"
+        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.2/css/all.min.css'">
 
   <!-- Styles -->
   <link rel="stylesheet" href="Style.css">
@@ -20,19 +51,29 @@
   <!-- EmailJS -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    emailjs.init({ publicKey: "zSRVly9utVNbvuqiD" });
+    if (window.emailjs) emailjs.init({ publicKey: "zSRVly9utVNbvuqiD" });
   </script>
   <!-- LDRS spinner -->
   <script type="module" src="https://cdn.jsdelivr.net/npm/ldrs/dist/auto/helix.js"></script>
+
+  <noscript>
+    <style>
+      [data-reveal] { opacity: 1 !important; }
+      .preloader { display: none !important; }
+    </style>
+  </noscript>
 </head>
 
 <body>
+  <a href="#home" class="skip-link">Skip to content</a>
 
   <!-- ============ PRELOADER ============ -->
-  <div class="preloader" id="preloader">
+  <div class="preloader" id="preloader" role="status" aria-live="polite">
     <div class="preloader-inner">
       <l-helix size="64" speed="1.2" color="#00e5ff"></l-helix>
       <p class="preloader-text">Dagi<span>Art</span></p>
+      <div class="preloader-bar"><span id="preloaderBar"></span></div>
+      <p class="preloader-pct" id="preloaderPct">0%</p>
     </div>
   </div>
 
@@ -48,6 +89,7 @@
     <span class="blob blob-1"></span>
     <span class="blob blob-2"></span>
     <span class="blob blob-3"></span>
+    <canvas class="particles" id="particles"></canvas>
   </div>
   <div class="grain" aria-hidden="true"></div>
 
@@ -55,21 +97,38 @@
   <header class="header" id="header">
     <a href="#home" class="logo">Dagi<span>Art</span></a>
 
-    <nav class="navbar" id="navbar">
+    <nav class="navbar" id="navbar" aria-label="Main navigation">
       <a href="#home" class="active">Home</a>
+      <a href="#about">About</a>
       <a href="#Dagi">Drawings</a>
-      <a href="#stats">About</a>
+      <a href="#process">Process</a>
       <a href="#Contact">Contact</a>
     </nav>
 
     <div class="header-actions">
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <div class="accent-picker" id="accentPicker">
+        <button class="icon-btn" id="accentBtn" type="button" aria-label="Choose accent color" aria-expanded="false" aria-haspopup="true">
+          <i class='bx bx-palette'></i>
+        </button>
+        <div class="accent-menu" id="accentMenu" role="group" aria-label="Accent colors">
+          <button class="swatch" type="button" data-accent="cyan"   style="--a:#00e5ff;--b:#ff2e88" aria-label="Cyan and pink"   aria-pressed="true"></button>
+          <button class="swatch" type="button" data-accent="violet" style="--a:#a78bfa;--b:#ff7ab8" aria-label="Violet and rose" aria-pressed="false"></button>
+          <button class="swatch" type="button" data-accent="mint"   style="--a:#2ee6a6;--b:#ffb020" aria-label="Mint and amber"  aria-pressed="false"></button>
+          <button class="swatch" type="button" data-accent="sunset" style="--a:#ffb02e;--b:#ff4d6d" aria-label="Amber and red"   aria-pressed="false"></button>
+        </div>
+      </div>
+
+      <button class="icon-btn theme-toggle" id="themeToggle" type="button" aria-label="Toggle light and dark theme">
         <i class='bx bx-moon'></i>
       </button>
-      <i class='bx bx-menu' id="menu-icon"></i>
+
+      <button class="menu-btn" id="menu-icon" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navbar">
+        <i class='bx bx-menu'></i>
+      </button>
     </div>
   </header>
 
+  <main>
   <!-- ============ HOME ============ -->
   <section class="home" id="home">
     <div class="home-content">
@@ -118,10 +177,15 @@
     </div>
 
     <div class="home-img" data-reveal="right" style="--d:.2s">
+      <span class="orbit orbit-1" aria-hidden="true"></span>
+      <span class="orbit orbit-2" aria-hidden="true"></span>
       <img src="Images/home.png" alt="Artwork by Dagim Gebeyehu">
+      <span class="chip chip-1"><i class='bx bx-brush'></i> Portraits</span>
+      <span class="chip chip-2"><i class='bx bx-pencil'></i> Sketches</span>
+      <span class="chip chip-3"><i class='bx bx-palette'></i> Concept Art</span>
     </div>
 
-    <a href="#Dagi" class="scroll-down" aria-label="Scroll down">
+    <a href="#about" class="scroll-down" aria-label="Scroll down">
       <span class="mouse"><span class="wheel"></span></span>
       <em>Scroll</em>
     </a>
@@ -131,18 +195,20 @@
   <div class="marquee" aria-hidden="true">
     <div class="marquee-track">
       <div class="marquee-group">
-        <span>Portrait</span><i>✦</i>
-        <span>Sketch</span><i>✦</i>
-        <span>Charcoal</span><i>✦</i>
-        <span>Concept Art</span><i>✦</i>
-        <span>Illustration</span><i>✦</i>
+        <span>Portrait</span><i class="star"></i>
+        <span>Sketch</span><i class="star"></i>
+        <span>Charcoal</span><i class="star"></i>
+        <span>Concept Art</span><i class="star"></i>
+        <span>Illustration</span><i class="star"></i>
+        <span>Painting</span><i class="star"></i>
       </div>
       <div class="marquee-group">
-        <span>Portrait</span><i>✦</i>
-        <span>Sketch</span><i>✦</i>
-        <span>Charcoal</span><i>✦</i>
-        <span>Concept Art</span><i>✦</i>
-        <span>Illustration</span><i>✦</i>
+        <span>Portrait</span><i class="star"></i>
+        <span>Sketch</span><i class="star"></i>
+        <span>Charcoal</span><i class="star"></i>
+        <span>Concept Art</span><i class="star"></i>
+        <span>Illustration</span><i class="star"></i>
+        <span>Painting</span><i class="star"></i>
       </div>
     </div>
   </div>
@@ -167,18 +233,75 @@
     </div>
   </section>
 
+  <!-- ============ ABOUT ============ -->
+  <section class="about" id="about">
+    <h2 class="heading" data-reveal>About <span>The Artist</span></h2>
+
+    <div class="about-grid">
+      <figure class="about-visual" data-reveal="left">
+        <img src="Images/Dagi1.jpg" alt="Featured artwork by Dagim Gebeyehu" loading="lazy">
+        <figcaption><i class='bx bx-brush'></i> Featured work</figcaption>
+      </figure>
+
+      <div class="about-body" data-reveal="right" style="--d:.1s">
+        <h3>Turning feelings into <span>images</span></h3>
+        <p>
+          I'm Dagim Gebeyehu, a painter and illustrator. Every piece starts as a feeling
+          or a story, and I work to translate it into something you can see — from quiet
+          pencil sketches to expressive portraits and concept art.
+        </p>
+        <p>
+          Whether you want a portrait of someone you love or a concept for a world of
+          your own, I'd love to hear about it.
+        </p>
+
+        <ul class="skills">
+          <li>
+            <div class="skill-head"><span>Portraits</span><em>95%</em></div>
+            <div class="bar"><span class="fill" style="--w:95%"></span></div>
+          </li>
+          <li>
+            <div class="skill-head"><span>Sketching</span><em>90%</em></div>
+            <div class="bar"><span class="fill" style="--w:90%"></span></div>
+          </li>
+          <li>
+            <div class="skill-head"><span>Concept Art</span><em>85%</em></div>
+            <div class="bar"><span class="fill" style="--w:85%"></span></div>
+          </li>
+          <li>
+            <div class="skill-head"><span>Charcoal</span><em>80%</em></div>
+            <div class="bar"><span class="fill" style="--w:80%"></span></div>
+          </li>
+        </ul>
+
+        <div class="tags">
+          <span>Graphite</span>
+          <span>Charcoal</span>
+          <span>Ink</span>
+          <span>Paint</span>
+          <span>Digital</span>
+        </div>
+
+        <a href="#Contact" class="btn magnetic">
+          <span>Work With Me</span>
+          <i class='bx bx-right-arrow-alt'></i>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ============ GALLERY ============ -->
   <section class="Dagi" id="Dagi">
     <h2 class="heading" data-reveal>Latest <span>Drawings</span></h2>
 
     <div class="filter-bar" data-reveal style="--d:.1s">
-      <button class="filter-btn active" data-filter="all">All</button>
-      <button class="filter-btn" data-filter="portrait">Portrait</button>
-      <button class="filter-btn" data-filter="sketch">Sketch</button>
-      <button class="filter-btn" data-filter="concept">Concept</button>
+      <button class="filter-btn active" type="button" data-filter="all">All <em class="count"></em></button>
+      <button class="filter-btn" type="button" data-filter="portrait">Portrait <em class="count"></em></button>
+      <button class="filter-btn" type="button" data-filter="sketch">Sketch <em class="count"></em></button>
+      <button class="filter-btn" type="button" data-filter="concept">Concept <em class="count"></em></button>
     </div>
 
-    <div class="Dagi-container" id="gallery">
+    <div class="Dagi-container" id="gallery" data-stagger>
       <article class="Dagi-box" data-category="portrait" data-title="Dagi — Portrait Study" data-reveal="zoom">
         <img src="Images/Dagi1.jpg" alt="Portrait drawing" loading="lazy">
         <div class="Dagi-layer">
@@ -299,45 +422,152 @@
         </div>
       </article>
     </div>
+
+    <p class="gallery-empty" id="galleryEmpty" hidden>No artworks in this category yet.</p>
   </section>
 
+  <!-- ============ PROCESS ============ -->
+  <section class="process" id="process">
+    <h2 class="heading" data-reveal>How I <span>Work</span></h2>
+
+    <ol class="steps" data-reveal="none" data-stagger>
+      <li class="step" data-reveal="bottom">
+        <span class="step-num">01</span>
+        <div class="step-icon"><i class='bx bx-message-detail'></i></div>
+        <h3>Share Your Idea</h3>
+        <p>Tell me about the subject, mood and size you have in mind. References are always welcome.</p>
+      </li>
+      <li class="step" data-reveal="bottom">
+        <span class="step-num">02</span>
+        <div class="step-icon"><i class='bx bx-pencil'></i></div>
+        <h3>First Sketch</h3>
+        <p>I draw a rough concept so we can agree on composition and direction early.</p>
+      </li>
+      <li class="step" data-reveal="bottom">
+        <span class="step-num">03</span>
+        <div class="step-icon"><i class='bx bx-brush'></i></div>
+        <h3>Refine &amp; Render</h3>
+        <p>Details, light and texture come together until the piece feels alive.</p>
+      </li>
+      <li class="step" data-reveal="bottom">
+        <span class="step-num">04</span>
+        <div class="step-icon"><i class='bx bx-check-circle'></i></div>
+        <h3>Final Delivery</h3>
+        <p>You review the finished artwork and receive it ready to frame, print or share.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ CONTACT ============ -->
+  <section class="Contact" id="Contact">
+    <h2 class="heading" data-reveal>Contact <span>Me!</span></h2>
+
+    <div class="contact-wrap">
+      <aside class="contact-info" data-reveal="left">
+        <h3>Let's make something together</h3>
+        <p>Have a portrait, sketch or concept in mind? Send a message and tell me about your idea — or find me on social media.</p>
+
+        <ul class="contact-links">
+          <li>
+            <a href="https://t.me/Iamdagm" target="_blank" rel="noopener">
+              <span class="ci"><i class="fa-brands fa-telegram"></i></span>
+              <span class="ct"><strong>Telegram</strong><small>@Iamdagm</small></span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/iamdagm" target="_blank" rel="noopener">
+              <span class="ci"><i class="fa-brands fa-instagram"></i></span>
+              <span class="ct"><strong>Instagram</strong><small>@iamdagm</small></span>
+            </a>
+          </li>
+          <li>
+            <a href="https://x.com/Dagi3406" target="_blank" rel="noopener">
+              <span class="ci"><i class="fa-brands fa-x-twitter"></i></span>
+              <span class="ct"><strong>X (Twitter)</strong><small>@Dagi3406</small></span>
+            </a>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/dagim-gebeyhu-3a561530b" target="_blank" rel="noopener">
+              <span class="ci"><i class="fa-brands fa-linkedin-in"></i></span>
+              <span class="ct"><strong>LinkedIn</strong><small>Dagim Gebeyehu</small></span>
+            </a>
+          </li>
+        </ul>
+      </aside>
+
+      <form id="contact-form" novalidate data-reveal="right" style="--d:.1s">
+        <div class="input-box">
+          <div class="field">
+            <input type="text" id="fullName" placeholder=" " autocomplete="name" required>
+            <label for="fullName">Full Name</label>
+            <small class="err" role="alert"></small>
+          </div>
+          <div class="field">
+            <input type="email" id="email" placeholder=" " autocomplete="email" required>
+            <label for="email">Email Address</label>
+            <small class="err" role="alert"></small>
+          </div>
+        </div>
+
+        <div class="input-box">
+          <div class="field">
+            <input type="tel" id="phoneNumber" placeholder=" " autocomplete="tel">
+            <label for="phoneNumber">Mobile Number (optional)</label>
+            <small class="err" role="alert"></small>
+          </div>
+          <div class="field">
+            <input type="text" id="subject" placeholder=" ">
+            <label for="subject">Subject (optional)</label>
+            <small class="err" role="alert"></small>
+          </div>
+        </div>
+
+        <div class="field area">
+          <textarea id="message" rows="7" maxlength="1000" placeholder=" " required></textarea>
+          <label for="message">Your Message</label>
+          <small class="counter" id="msgCount">0 / 1000</small>
+          <small class="err" role="alert"></small>
+        </div>
+
+        <!-- Honeypot: hidden from people, bots tend to fill it -->
+        <input type="text" id="website" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <button type="submit" class="btn magnetic" id="sendBtn">
+          <span>Send Message</span>
+          <i class='bx bx-send'></i>
+        </button>
+      </form>
+    </div>
+  </section>
+  </main>
+
   <!-- ============ LIGHTBOX ============ -->
-  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-hidden="true">
-    <button class="lb-btn lb-close" id="lbClose" aria-label="Close"><i class='bx bx-x'></i></button>
-    <button class="lb-btn lb-prev" id="lbPrev" aria-label="Previous"><i class='bx bx-chevron-left'></i></button>
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Artwork viewer" aria-hidden="true">
+    <div class="lb-progress" aria-hidden="true"><span id="lbBar"></span></div>
+
+    <div class="lb-toolbar">
+      <button class="lb-btn lb-sm" id="lbPlay" type="button" aria-label="Start slideshow" aria-pressed="false"><i class='bx bx-play'></i></button>
+      <button class="lb-btn lb-sm" id="lbZoom" type="button" aria-label="Zoom"><i class='bx bx-zoom-in'></i></button>
+      <button class="lb-btn lb-sm" id="lbFull" type="button" aria-label="Fullscreen"><i class='bx bx-fullscreen'></i></button>
+      <button class="lb-btn lb-sm" id="lbClose" type="button" aria-label="Close viewer"><i class='bx bx-x'></i></button>
+    </div>
+
+    <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Previous"><i class='bx bx-chevron-left'></i></button>
 
     <figure class="lb-figure">
-      <img src="" alt="" id="lbImage">
+      <div class="lb-stage">
+        <img src="" alt="" id="lbImage">
+      </div>
       <figcaption>
         <span class="lb-title" id="lbTitle"></span>
         <span class="lb-count" id="lbCount"></span>
       </figcaption>
     </figure>
 
-    <button class="lb-btn lb-next" id="lbNext" aria-label="Next"><i class='bx bx-chevron-right'></i></button>
+    <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Next"><i class='bx bx-chevron-right'></i></button>
+
+    <div class="lb-thumbs" id="lbThumbs"></div>
   </div>
-
-  <!-- ============ CONTACT ============ -->
-  <section class="Contact" id="Contact">
-    <h2 class="heading" data-reveal>Contact <span>Me!</span></h2>
-
-    <form id="contact-form" novalidate data-reveal style="--d:.1s">
-      <div class="input-box">
-        <input type="text"  id="fullName"    placeholder="Full Name"     autocomplete="name"  required>
-        <input type="email" id="email"       placeholder="Email Address" autocomplete="email" required>
-      </div>
-      <div class="input-box">
-        <input type="tel"   id="phoneNumber" placeholder="Mobile Number" autocomplete="tel">
-        <input type="text"  id="subject"     placeholder="Email Subject">
-      </div>
-      <textarea id="message" cols="30" rows="10" placeholder="Your Message" required></textarea>
-
-      <button type="submit" class="btn magnetic" id="sendBtn">
-        <span>Send Message</span>
-        <i class='bx bx-send'></i>
-      </button>
-    </form>
-  </section>
 
   <!-- Sending overlay -->
   <div class="sending" id="sending" hidden>
@@ -346,34 +576,53 @@
 
   <!-- ============ FOOTER ============ -->
   <footer class="footer">
-    <div class="footer-text">
-      <p>Copyright &copy; 2024 by Dagim Gebeyehu | All Rights Reserved.</p>
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="#home" class="logo">Dagi<span>Art</span></a>
+        <p>Painter, illustrator and sketch artist bringing emotions and stories to life, one drawing at a time.</p>
+      </div>
+
+      <nav class="footer-links" aria-label="Footer navigation">
+        <h4>Explore</h4>
+        <a href="#about">About</a>
+        <a href="#Dagi">Drawings</a>
+        <a href="#process">Process</a>
+        <a href="#Contact">Contact</a>
+      </nav>
+
+      <!-- ===== FOOTER SOCIALS (Font Awesome brands) ===== -->
+      <div class="footer-follow">
+        <h4>Follow</h4>
+        <div class="footer-socials">
+          <a href="https://www.instagram.com/iamdagm" target="_blank" rel="noopener" aria-label="Instagram">
+            <i class="fa-brands fa-instagram"></i>
+          </a>
+          <a href="https://t.me/Iamdagm" target="_blank" rel="noopener" aria-label="Telegram">
+            <i class="fa-brands fa-telegram"></i>
+          </a>
+          <a href="https://x.com/Dagi3406" target="_blank" rel="noopener" aria-label="X (Twitter)">
+            <i class="fa-brands fa-x-twitter"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/dagim-gebeyhu-3a561530b" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <i class="fa-brands fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
     </div>
 
-    <!-- ===== FOOTER SOCIALS (Font Awesome brands) ===== -->
-    <div class="footer-socials">
-      <a href="https://www.instagram.com/iamdagm"
-         target="_blank" rel="noopener" aria-label="Instagram">
-        <i class="fa-brands fa-instagram"></i>
-      </a>
-      <a href="https://t.me/Iamdagm"
-         target="_blank" rel="noopener" aria-label="Telegram">
-        <i class="fa-brands fa-telegram"></i>
-      </a>
-      <a href="https://x.com/Dagi3406"
-         target="_blank" rel="noopener" aria-label="X (Twitter)">
-        <i class="fa-brands fa-x-twitter"></i>
-      </a>
-    </div>
-
-    <div class="footer-iconTop">
-      <a href="#home" aria-label="Back to top"><i class="bx bx-up-arrow-alt"></i></a>
+    <div class="footer-bottom">
+      <div class="footer-text">
+        <p>Copyright &copy; <span id="year">2026</span> by Dagim Gebeyehu | All Rights Reserved.</p>
+      </div>
+      <div class="footer-iconTop">
+        <a href="#home" aria-label="Back to top"><i class="bx bx-up-arrow-alt"></i></a>
+      </div>
     </div>
   </footer>
 
   <!-- ============ BACK TO TOP (with progress ring) ============ -->
-  <button class="back-to-top" id="backToTop" aria-label="Back to top">
-    <svg viewBox="0 0 44 44">
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">
+    <svg viewBox="0 0 44 44" aria-hidden="true">
       <circle class="ring-bg" cx="22" cy="22" r="20"></circle>
       <circle class="ring"    cx="22" cy="22" r="20"></circle>
     </svg>
